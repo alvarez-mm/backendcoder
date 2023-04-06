@@ -1,0 +1,38 @@
+[
+	{
+		"title": "vestido",
+		"description": "vestido rojo",
+		"price": 10000,
+		"thumbnail": "link",
+		"codigo": 203,
+		"stock": 10,
+		"id": 1
+	},
+	{
+		"title": "zapatillas",
+		"description": "zapatillas blancas",
+		"price": 20000,
+		"thumbnail": "link",
+		"codigo": 300,
+		"stock": 10,
+		"id": 2
+	},
+	{
+		"title": "camisa",
+		"description": "camisa negra",
+		"price": 15000,
+		"thumbnail": "link",
+		"codigo": 400,
+		"stock": 10,
+		"id": 3
+	},
+	{
+		"title": "remera",
+		"description": "remera de mangas cortas",
+		"price": 5000,
+		"thumbnail": "link",
+		"codigo": 500,
+		"stock": 10,
+		"id": 4
+	}
+]
