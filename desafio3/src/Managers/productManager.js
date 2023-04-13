@@ -1,6 +1,6 @@
 import fs from "fs";
 
-const path = "./src/files/bd.json"
+const path = "../src/files/bd.json"
 
 export default class ProductManager {
 
