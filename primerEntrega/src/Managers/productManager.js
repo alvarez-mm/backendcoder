@@ -1,6 +1,6 @@
 import fs from "fs";
 
-const path = "../files/dbproducts.json"
+const path = "./files/dbproducts.json"
 
 export default class ProductManager {
 
@@ -8,14 +8,16 @@ export default class ProductManager {
         
         if(fs.existsSync(path)) {
             const data = await fs.promises.readFile(path , "utf-8");
-            const productos = JSON.parse(data);
-            if (!limit) { 
-                return productos
-            } else {
-
-                for (let i = 0 ; i <= limit; i++) {
-                    return productos[limit]
+            const products = JSON.parse(data);
+            if (limit) {
+                if (limit > 0){
+                    const productsLimit = products.splice(0, limit)
+                    return productsLimit;
+                }else{
+                    return `El limite debe ser mayor a 0`
                 }
+            }else{
+                return products;
             }
         } else {
             return [];
@@ -47,21 +49,17 @@ export default class ProductManager {
         }
     }
 
-    putProductById = async (pid, producto) => {
-        const productos = await this.getProducts();
+    putProductById = async (pid, product) => {
+        let productById = await this.getProductById(pid);
 
-        const productIndex = productos.findIndex((prod) => {
-            return prod.id == pid
-        }) 
-
-        productos[productIndex] = producto
-
-        try {
-            await fs.promises.writeFile(path, JSON.stringify(productos,null,"\t"))
-            return "Usuario modificado"
-        } catch (error) {
-            return error
+        if (!productById) {
+            return "Producto no encontrado"
         }
+        await this.deleteProductById(pid)
+        let productsOld = await this.getProducts()
+        let products = [{...product, id : id}, ...productsOld]
+        await fs.promises.writeFile(path, JSON.stringify(products, null, '\t'))
+        return "Producto modificado"
     }
     
 
@@ -73,11 +71,9 @@ export default class ProductManager {
         productos.splice(productIndex, 1)
         try {
             await fs.promises.writeFile(path, JSON.stringify(productos,null,"\t"))
-            return "Usuario eliminado"
+            return "Producto eliminado"
         } catch (error) {
             return error
         }
     }
-
-
 }

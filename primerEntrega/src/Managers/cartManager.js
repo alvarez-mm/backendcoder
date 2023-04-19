@@ -1,6 +1,6 @@
 import fs from "fs";
 
-const path = "../files/dbcarts.json"
+const path = "./files/dbcarts.json"
 
 export default class CartManager {
 
@@ -16,13 +16,19 @@ export default class CartManager {
         }
     }
 
-    addCart = async (cart) => {
+    addCart = async () => {
         const carts = await this.getCarts();
 
-        let id = carts[carts.length-1].id;
-        cart.id = ++id
+        let carrito = {
+            products: []
+        };
 
-        carts.push(cart)
+        if (carts.length === 0) {
+            carrito.id - 1;
+        }else{
+            carrito.id = carts [carts.length - 1].id + 1;
+        }
+        carts.push(carrito)
 
         try {
             await fs.promises.writeFile(path, JSON.stringify(carts,null,"\t"))
@@ -40,4 +46,26 @@ export default class CartManager {
         })
         return cartId
     }
+
+    agregarProdAlCart = async (idCart, idProd) => {
+        const carritos = await this.getCarts();
+        
+        const findedCart = carritos.find((cart) => cart.id == idCart);
+      
+        let productosEnElCarrito = findedCart.products;
+
+        const productoIndex = productosEnElCarrito.findIndex((prodIndex)=> prodIndex.id === idCart);
+
+        if(productoIndex !== -1){
+            productosEnElCarrito[productoIndex].quantity = productosEnElCarrito[productoIndex].quantity + 1;
+        }else{
+            let producto = {
+                id: idProd,
+                quantity: 1,
+            }
+            productosEnElCarrito.push(producto);
+        }
+        await fs.promises.writeFile(path, JSON.stringify(carritos, null, '\t'));
+        return findedCart;
+    };
 }

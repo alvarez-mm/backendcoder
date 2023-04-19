@@ -6,8 +6,6 @@ const productManager = new ProductManager();
 
 const router = Router();
 
-app.use(express.urlencoded({extended:true}))
-
 const products = [];
 
 router.get("/", async (req, res) => {
@@ -25,29 +23,26 @@ router.get("/:pid", async (req, res) => {
 
 router.post("/", async (req, res) => {
 
-    const product = req.body;
+    const {title, description, price, thumbnail, code, stock, category} = req.body;
     
 
-    if (!title || !description || !code || !price || !stock) {
+    if (!title || !description || !price || !code || !stock || !category) {
         res.send ("Faltan datos")
         return
     }
+    const product = {
+        title, description, price, thumbnail, code, stock, status:true, category
+    }
     const msg = await productManager.addProduct(product)
     res.send(msg)
-
 })
 
 router.put("/:pid", async (req, res) => {
     
-    const product = req.body;
-    const pid = req.params.pid;
+    let pid = req.params.pid;
+    let product = req.body;
     
-    if (!title || !description || !code || !price || !stock) {
-        res.send ("Faltan datos")
-        return
-    }
-    const msg = await productManager.putProductById(pid, product)
-    res.send(msg)
+    res.send(await productManager.putProductById(pid, product))
 })
 
 router.delete("/:pid", async (req, res) => {
